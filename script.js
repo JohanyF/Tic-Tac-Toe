@@ -2,15 +2,28 @@
 function Gameboard() {
     const row = 3;
     const column = 3
-    board = [];
+    // board = [];
 
-    for(let i = 0; i < row; i++) {
-        board[i] = [];
-        for(let j = 0; j < column; j++) {
-            board[i][j] = " ";
-            // board[i].push(Cell());
-        }
-    }
+    // board = [
+    //     ["1","2","3"],
+    //     ["4","5","6"],
+    //     ["7","8","9"],
+    // ]
+    board = [
+        ["X", "O", "X"],
+        ["O", "X", "O"],
+        ["O", "X", ""],
+    ]
+    
+
+    // let num = 0;
+    // for(let i = 0; i < row; i++) {
+    //     board[i] = [];
+    //     for(let j = 0; j < column; j++) {
+    //         board[i][j] = num;
+    //         num++;
+    //     }
+    // }
 
     // return the board
     const getBoard = () => board;
@@ -69,13 +82,64 @@ function GameController() {
     const getCurrentPlayer = () => activePlayerTurn
 
     // Checks is a player has won or if the game had ended up in a draw
-    const statusOfGame = () => {
+    const checkForWin = () => {
+        const board = game.getBoard();
+        for(let i = 0; i < 3; i++) {
+            
+            if(board[0][i] === board[1][i] && board[0][i] === board[2][i]) {
+                console.log("COL SAME");
+                return true;
+            } else if (board[i][0] === board[i][1] && board[i][0] === board[i][2]) {
+                console.log("ROW SAME");
+                return true;
+            }
+
+            if(board[0][0] === board[1][1] && board[0][0] === board[2][2]) {
+                console.log("DIAGONAL &");
+                return true;
+            } else if (board[2][0] === board[1][1] && board[2][0] === board[0][2]) {
+                console.log("Diagonal /");
+                return true;
+            }
+        }
+
+        console.log("NOBODY HAS WON YET...");
+        return false;
+    }
+
+    const checkForTie = () => {
+        const board = game.getBoard();
+
+        let tie = false;
+
+        const isThereMarker = (marker) => {
+            return marker == "X" || marker === "O";
+        }
+
+        for(let i = 0; i < 3; i++) {
+            // console.log(board[i].every(isThereMarker));
+            tie = board[i].every(isThereMarker);
+            // console.log(`Value of tie is ${tie}`);
+            if(tie === false) {
+                return tie;
+            }
+        }
+
+        return tie;
+
 
     }
 
     // Play round
     const playRound = (row, col) => {
         game.placeMarker(row, col, getCurrentPlayer().marker);
+        // checkForWin();
+        if(checkForWin() === true) {
+            console.log(`${getCurrentPlayer().player} has won!`);
+        }
+        if(checkForTie() === true) {
+            console.log("There has been a tie! Restart if you will like to continue...")
+        }
 
         switchPlayerTurn();
         printNextRound();
@@ -84,7 +148,7 @@ function GameController() {
 
     console.log(`It's ${getCurrentPlayer().player} turn...`)
 
-    return { playRound, getCurrentPlayer };
+    return { playRound, getCurrentPlayer};
 
 }
 
