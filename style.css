@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-family: "Quicksand", sans-serif;
+}
+
+p { 
+    font-size: 5rem;
+    font-weight: 600;
+}
+
+.container {
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+}
+
+.game-container {
+    height: 300px;
+    width: 300px;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+
+    grid-template-columns: 100px 100px 100px;
+    grid-template-rows: 100px 100px 100px;
+}
+
+.cell {
+    height: 100px;
+    width: 100px;
+    background-color: white;
+    border: 3px solid black;
+
+    font-family: inherit;
+}
+
+.nbl {
+    border-left: none;
+}
+
+.nbt {
+    border-top: none;
+}
+
+.nbr {
+    border-right: none;
+}
+
+.nbb {
+    border-bottom: none;
+}
