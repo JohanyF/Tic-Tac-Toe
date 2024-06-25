@@ -8,17 +8,23 @@
 </head>
 <body>
     <div class="container">
-        <div class="game-container">
-            <button type="button" class="cell nbl nbt"><p>X</p></button>
-            <button type="button" class="cell nbt"><p></p></button>
-            <button type="button" class="cell nbt nbr"><p></p></button>
-            <button type="button" class="cell nbl"><p></p></button>
-            <button type="button" class="cell"><p></p></button>
-            <button type="button" class="cell nbr"><p></p></button>
-            <button type="button" class="cell nbl nbb"><p></p></button>
-            <button type="button" class="cell nbb "><p></p></button>
-            <button type="button" class="cell nbr nbb"><p></p></button>
-        </div>
+        <header class="header">
+            <h1>Tic-Tac-Toe</h1>
+        </header>
+        <main class="main">
+            <p class="message">Player 1 Turn...</p>
+            <div class="game-container">
+                <button type="button" class="btn-cell nbl nbt" data-row="0" data-col="0"></button>
+                <button type="button" class="btn-cell nbt" data-row="0" data-col="1"></button>
+                <button type="button" class="btn-cell nbt nbr" data-row="0" data-col="2"></button>
+                <button type="button" class="btn-cell nbl" data-row="1" data-col="0"></button>
+                <button type="button" class="btn-cell" data-row="1" data-col="1"></button>
+                <button type="button" class="btn-cell nbr" data-row="1" data-col="2"></button>
+                <button type="button" class="btn-cell nbl nbb" data-row="2" data-col="0"></button>
+                <button type="button" class="btn-cell nbb " data-row="2" data-col="1"></button>
+                <button type="button" class="btn-cell nbr nbb" data-row="2" data-col="2"></button>
+            </div>
+        </main>
     </div>
     <script src="script.js"></script>
 </body>
