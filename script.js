@@ -158,6 +158,7 @@ function Gameboard() {
 const GameController = (() => {
     const playerOneName = "Player 1";
     const playerTwoName = "Player 2";
+    let isGameOver = false;
 
     const game = Gameboard();
 
@@ -182,6 +183,7 @@ const GameController = (() => {
     const printNextRound = () => {
         console.log(game.getBoard());
         console.log(`${getCurrentPlayer().player} turn...`)
+        displayController.displayWhoTurnMessage(getCurrentPlayer().player);
     }
 
     const getCurrentPlayer = () => activePlayerTurn
@@ -237,10 +239,12 @@ const GameController = (() => {
 
         if(checkForWin() === true) {
             console.log(`${getCurrentPlayer().player} has won!`);
-            return;
+            isGameOver = true;
+            displayController.displayWinnerMessage();
         } else if(checkForTie() === true) {
             console.log("There has been a tie! Restart if you will like to continue...")
-            return;
+            isGameOver = true;
+            displayController.displayTieMessage();
         } else {
             switchPlayerTurn();
             printNextRound();
@@ -249,13 +253,15 @@ const GameController = (() => {
 
     }
 
+    const getIsGameOver = () => isGameOver;
+
     // TODO: Add return values to the if statements. Create a function to check if game is over, and if it is over, then ask the user if they would like to continue or not
     // Therefore you will need to create a function that restarts the whole game. 
     // Optional: Keep score of the if the user wants to keep playing. Score is reset to 0 is user selects if they want to restart/done playing
 
     console.log(`It's ${getCurrentPlayer().player} turn...`)
 
-    return { playRound, getCurrentPlayer};
+    return { playRound, getCurrentPlayer, getIsGameOver };
 
 })();
 
@@ -263,14 +269,37 @@ const GameController = (() => {
 
 const displayController = (() => {
     const btns = document.querySelectorAll("button");
-    console.log(btns);
-    
+    const message = document.querySelector(".message");
     btns.forEach((btn) => {
         btn.addEventListener("click", () => {
+            if(GameController.getIsGameOver() === true) return;
             console.log("CLICK");
-            console.log(`${GameController.getCurrentPlayer().marker}`);
+            message.textContent = `${GameController.getCurrentPlayer().player} Turn...`;
+            // console.log(`${GameController.getCurrentPlayer().marker}`);
+            btn.textContent = GameController.getCurrentPlayer().marker;
+            if(btn.textContent === "X" || btn.textContent === "O") {
+                btn.disabled = true;
+            } 
+            GameController.playRound(btn.getAttribute("data-row"), btn.getAttribute("data-col"));
         })
     })
+
+    const displayWinnerMessage = () => {
+        message.textContent = `${GameController.getCurrentPlayer().player} has won!`;
+
+    }
+
+    const displayTieMessage = () => {
+        message.textContent = "There has been a tie...";
+    }
+
+    const displayWhoTurnMessage = (player) => {
+        message.textContent = `${player} Turn...`;
+
+    }
+
+    return { displayWinnerMessage, displayTieMessage, displayWhoTurnMessage };
+    
 })();
 
 // TODO: Add functionality to play the game on the screen. Think of adding an id value to each cell so it can be updated to the array in the background.
