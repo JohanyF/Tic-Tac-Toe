@@ -10,17 +10,18 @@ body {
     font-family: "Quicksand", sans-serif;
 }
 
-p { 
+/* p { 
     font-size: 5rem;
     font-weight: 600;
-}
+} */
 
 .container {
     height: 100vh;
     width: 100vw;
-    display: grid;
-    align-items: center;
+    display: flex;
     justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .game-container {
@@ -34,13 +35,20 @@ p {
     grid-template-rows: 100px 100px 100px;
 }
 
-.cell {
+.btn-cell {
     height: 100px;
     width: 100px;
     background-color: white;
     border: 3px solid black;
-
+    color: black;
+    
     font-family: inherit;
+    font-size: 5rem;
+    font-weight: 600;
+}
+
+.btn-cell:disabled {
+    cursor: not-allowed;
 }
 
 .nbl {
