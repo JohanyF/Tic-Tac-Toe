@@ -42,117 +42,18 @@ function Gameboard() {
         }
     }
 
+    const resetBoard = () => {
+        board = [
+            ["1","2","3"],
+            ["4","5","6"],
+            ["7","8","9"],
+        ]
+    }
 
 
-    return { getBoard, placeMarker, printBoard };
+
+    return { getBoard, placeMarker, printBoard, resetBoard };
 }
-
-
-
-// // Function start the game and controls the game logic
-// function GameController() {
-//     const playerOneName = "Player 1";
-//     const playerTwoName = "Player 2";
-
-//     const game = Gameboard();
-
-//     const players = [
-//         {
-//             player: playerOneName,
-//             marker: "X"
-//         },
-//         {
-//             player: playerTwoName,
-//             marker: "O"
-//         }
-//     ]
-
-//     // Active Player Turn
-//     let activePlayerTurn = players[0];
-//     // console.log(activePlayerTurn);
-
-//     //function that alternates between which Player turn it is
-//     const switchPlayerTurn = () => activePlayerTurn === players[0] ? activePlayerTurn = players[1] : activePlayerTurn = players[0];
-
-//     const printNextRound = () => {
-//         console.log(game.getBoard());
-//         console.log(`${getCurrentPlayer().player} turn...`)
-//     }
-
-//     const getCurrentPlayer = () => activePlayerTurn
-
-//     // Checks is a player has won or if the game had ended up in a draw
-//     const checkForWin = () => {
-//         const board = game.getBoard();
-//         for(let i = 0; i < 3; i++) {
-            
-//             if(board[0][i] === board[1][i] && board[0][i] === board[2][i]) {
-//                 console.log("COL SAME");
-//                 return true;
-//             } else if (board[i][0] === board[i][1] && board[i][0] === board[i][2]) {
-//                 console.log("ROW SAME");
-//                 return true;
-//             }
-
-//             if(board[0][0] === board[1][1] && board[0][0] === board[2][2]) {
-//                 console.log("DIAGONAL &");
-//                 return true;
-//             } else if (board[2][0] === board[1][1] && board[2][0] === board[0][2]) {
-//                 console.log("Diagonal /");
-//                 return true;
-//             }
-//         }
-
-//         console.log("NOBODY HAS WON YET...");
-//         return false;
-//     }
-
-//     const checkForTie = () => {
-//         const board = game.getBoard();
-
-//         let tie = false;
-
-//         const isThereMarker = (marker) => {
-//             return marker == "X" || marker === "O";
-//         }
-
-//         for(let i = 0; i < 3; i++) {
-//             tie = board[i].every(isThereMarker);
-//             if(tie === false) {
-//                 return tie;
-//             }
-//         }
-
-//         return tie;
-//     }
-
-//     // Play round
-//     const playRound = (row, col) => {
-//         game.placeMarker(row, col, getCurrentPlayer().marker);
-
-//         if(checkForWin() === true) {
-//             console.log(`${getCurrentPlayer().player} has won!`);
-//             return;
-//         } else if(checkForTie() === true) {
-//             console.log("There has been a tie! Restart if you will like to continue...")
-//             return;
-//         } else {
-//             switchPlayerTurn();
-//             printNextRound();
-//         }
-
-
-//     }
-
-//     // TODO: Add return values to the if statements. Create a function to check if game is over, and if it is over, then ask the user if they would like to continue or not
-//     // Therefore you will need to create a function that restarts the whole game. 
-//     // Optional: Keep score of the if the user wants to keep playing. Score is reset to 0 is user selects if they want to restart/done playing
-
-//     console.log(`It's ${getCurrentPlayer().player} turn...`)
-
-//     return { playRound, getCurrentPlayer};
-
-// }
 
 // Function start the game and controls the game logic
 const GameController = (() => {
@@ -165,11 +66,13 @@ const GameController = (() => {
     const players = [
         {
             player: playerOneName,
-            marker: "X"
+            marker: "X",
+            score: 0
         },
         {
             player: playerTwoName,
-            marker: "O"
+            marker: "O",
+            score: 0
         }
     ]
 
@@ -235,12 +138,18 @@ const GameController = (() => {
 
     // Play round
     const playRound = (row, col) => {
-        game.placeMarker(row, col, getCurrentPlayer().marker);
+        // game.placeMarker(row, col, getCurrentPlayer().marker);
+        game.placeMarker(row, col, activePlayerTurn.marker);
 
         if(checkForWin() === true) {
-            console.log(`${getCurrentPlayer().player} has won!`);
+            console.log(`${activePlayerTurn.player} has won!`);
+            console.log(activePlayerTurn.score);
+            activePlayerTurn.score++
+            console.log(activePlayerTurn.score);
             isGameOver = true;
             displayController.displayWinnerMessage();
+            displayController.displayScore(players[0].score, players[1].score);
+            console.log(activePlayerTurn.player);
         } else if(checkForTie() === true) {
             console.log("There has been a tie! Restart if you will like to continue...")
             isGameOver = true;
@@ -253,23 +162,43 @@ const GameController = (() => {
 
     }
 
-    const getIsGameOver = () => isGameOver;
+    const restartGame = () => {
+        // clear board (The array board, the diplayController will handle the html stuff)
+        // set player's score to 0
+        // set activePlayerTurn to player1 
+        game.resetBoard();
+        players[0].score = 0;
+        players[1].score = 0;
+        activePlayerTurn = players[0];
+        console.log(activePlayerTurn);
+        console.log(players[0]);
+        isGameOver = false;
 
-    // TODO: Add return values to the if statements. Create a function to check if game is over, and if it is over, then ask the user if they would like to continue or not
-    // Therefore you will need to create a function that restarts the whole game. 
-    // Optional: Keep score of the if the user wants to keep playing. Score is reset to 0 is user selects if they want to restart/done playing
+
+    }
+
+    const rematch = () => {
+        game.resetBoard();
+        switchPlayerTurn();
+        isGameOver = false;
+    }
+
+    const getIsGameOver = () => isGameOver;
 
     console.log(`It's ${getCurrentPlayer().player} turn...`)
 
-    return { playRound, getCurrentPlayer, getIsGameOver };
+    return { playRound, restartGame, rematch, getCurrentPlayer, getIsGameOver };
 
 })();
 
 // const TicTacToeGame = GameController();
 
 const displayController = (() => {
-    const btns = document.querySelectorAll("button");
+    const btns = document.querySelectorAll(".btn-cell");
     const message = document.querySelector(".message");
+    const player1ScoreElem = document.querySelector("#player-1");
+    const player2ScoreElem = document.querySelector("#player-2");
+
     btns.forEach((btn) => {
         btn.addEventListener("click", () => {
             if(GameController.getIsGameOver() === true) return;
@@ -295,11 +224,36 @@ const displayController = (() => {
 
     const displayWhoTurnMessage = (player) => {
         message.textContent = `${player} Turn...`;
-
     }
 
-    return { displayWinnerMessage, displayTieMessage, displayWhoTurnMessage };
+    const displayScore = (player1Score, player2Score) => {
+        player1ScoreElem.textContent = player1Score;
+        player2ScoreElem.textContent = player2Score;
+    } 
+
+    const removeMarkers = () => {
+        btns.forEach((btn) => {
+            btn.textContent = "";
+            btn.disabled = false;
+        })
+    }
+
+
+    const restartBtn = document.querySelector(".restart-btn");
+    restartBtn.addEventListener("click", () => {
+        GameController.restartGame();
+        removeMarkers();
+        displayWhoTurnMessage(GameController.getCurrentPlayer().player);
+        player1ScoreElem.textContent = 0;
+        player2ScoreElem.textContent = 0;
+
+    })
+    const rematchBtn = document.querySelector(".rematch-btn");
+    rematchBtn.addEventListener("click", () => {
+        GameController.rematch();
+        removeMarkers();
+        displayWhoTurnMessage(GameController.getCurrentPlayer().player);
+    })
+    return { displayWinnerMessage, displayTieMessage, displayWhoTurnMessage, displayScore };
     
 })();
-
-// TODO: Add functionality to play the game on the screen. Think of adding an id value to each cell so it can be updated to the array in the background.
