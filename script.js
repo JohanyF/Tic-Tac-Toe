@@ -257,3 +257,11 @@ const displayController = (() => {
     return { displayWinnerMessage, displayTieMessage, displayWhoTurnMessage, displayScore };
     
 })();
+
+
+// TODO: Just focus on the HTML/CSS Now
+// Create a modal/dialog that pop up when a match is over and display the two buttons for user
+
+const dialog = document.querySelector("dialog");
+// console.log(dialog);
+// dialog.showModal();
