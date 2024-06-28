@@ -79,10 +79,19 @@ body {
 
     padding: 0.5rem;
     line-height: 0.8;
+    cursor: pointer;
 }
 
 .btn-cell:disabled {
     cursor: not-allowed;
+}
+
+.btn-cell:hover {
+    background-color: #80808017;
+}
+
+.btn-cell:disabled:hover {
+    background-color: white;
 }
 
 .nbl {
@@ -162,7 +171,7 @@ body {
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    gap: 2rem;
+    gap: 1rem;
     height: 100%;
     width: 100%;
 }
@@ -170,6 +179,7 @@ body {
 .statusMessage {
     font-size: calc(3.5vw - 4px);
     font-weight: 900;
+    flex: 1;
 }
 
 .modal-btns {
@@ -179,6 +189,7 @@ body {
     align-items: center;
     gap: 1rem;  
     width: 85%; 
+    flex: 1;
 }
 
 .restart-btn,
@@ -189,6 +200,7 @@ body {
     font-weight: 600;
     border: none;
     box-shadow: 4px 4px 6px 0px rgb(189 187 187 / 80%);
+    cursor: pointer;
 }
 
 .restart-btn {
@@ -196,9 +208,17 @@ body {
     background-color: var(--restart-color);
 }
 
+.restart-btn:hover {
+    background-color: #aeadad;
+}
+
 .rematch-btn {
     flex: 1.4;
     background-color: var(--rematch-color);
+}
+
+.rematch-btn:hover {
+    background-color: #ff6666;
 }
 
 .test {
