@@ -36,9 +36,8 @@ function Gameboard() {
     const printBoard = () => {
         for(let i = 0; i < 3; i++) {
             for(let j = 0; j < 3; j++) {
-                console.log(`${board[i][j]}`);
+                // console.log(`${board[i][j]}`);
             }
-            // console.log("\n");
         }
     }
 
@@ -84,8 +83,8 @@ const GameController = (() => {
     const switchPlayerTurn = () => activePlayerTurn === players[0] ? activePlayerTurn = players[1] : activePlayerTurn = players[0];
 
     const printNextRound = () => {
-        console.log(game.getBoard());
-        console.log(`${getCurrentPlayer().player} turn...`)
+        // console.log(game.getBoard());
+        // console.log(`${getCurrentPlayer().player} turn...`)
         displayController.displayWhoTurnMessage(getCurrentPlayer().player);
     }
 
@@ -97,23 +96,18 @@ const GameController = (() => {
         for(let i = 0; i < 3; i++) {
             
             if(board[0][i] === board[1][i] && board[0][i] === board[2][i]) {
-                console.log("COL SAME");
                 return true;
             } else if (board[i][0] === board[i][1] && board[i][0] === board[i][2]) {
-                console.log("ROW SAME");
                 return true;
             }
 
             if(board[0][0] === board[1][1] && board[0][0] === board[2][2]) {
-                console.log("DIAGONAL &");
                 return true;
             } else if (board[2][0] === board[1][1] && board[2][0] === board[0][2]) {
-                console.log("Diagonal /");
                 return true;
             }
         }
 
-        console.log("NOBODY HAS WON YET...");
         return false;
     }
 
@@ -142,18 +136,17 @@ const GameController = (() => {
         game.placeMarker(row, col, activePlayerTurn.marker);
 
         if(checkForWin() === true) {
-            console.log(`${activePlayerTurn.player} has won!`);
-            console.log(activePlayerTurn.score);
-            activePlayerTurn.score++
-            console.log(activePlayerTurn.score);
+            // console.log(`${activePlayerTurn.player} has won!`);
+            activePlayerTurn.score++;
+            // console.log(activePlayerTurn.score);
             isGameOver = true;
-            displayController.displayWinnerMessage();
+            displayController.displayModal(displayController.displayWinnerMessage);
             displayController.displayScore(players[0].score, players[1].score);
-            console.log(activePlayerTurn.player);
+            // console.log(activePlayerTurn.player);
         } else if(checkForTie() === true) {
-            console.log("There has been a tie! Restart if you will like to continue...")
+            // console.log("There has been a tie! Restart if you will like to continue...")
             isGameOver = true;
-            displayController.displayTieMessage();
+            displayController.displayModal(displayController.displayTieMessage);
         } else {
             switchPlayerTurn();
             printNextRound();
@@ -163,18 +156,11 @@ const GameController = (() => {
     }
 
     const restartGame = () => {
-        // clear board (The array board, the diplayController will handle the html stuff)
-        // set player's score to 0
-        // set activePlayerTurn to player1 
         game.resetBoard();
         players[0].score = 0;
         players[1].score = 0;
         activePlayerTurn = players[0];
-        console.log(activePlayerTurn);
-        console.log(players[0]);
         isGameOver = false;
-
-
     }
 
     const rematch = () => {
@@ -185,26 +171,22 @@ const GameController = (() => {
 
     const getIsGameOver = () => isGameOver;
 
-    console.log(`It's ${getCurrentPlayer().player} turn...`)
-
     return { playRound, restartGame, rematch, getCurrentPlayer, getIsGameOver };
 
 })();
-
-// const TicTacToeGame = GameController();
 
 const displayController = (() => {
     const btns = document.querySelectorAll(".btn-cell");
     const message = document.querySelector(".message");
     const player1ScoreElem = document.querySelector("#player-1");
     const player2ScoreElem = document.querySelector("#player-2");
+    const modalMessage = document.querySelector(".statusMessage");
+    const dialog = document.querySelector("dialog");
 
     btns.forEach((btn) => {
         btn.addEventListener("click", () => {
             if(GameController.getIsGameOver() === true) return;
-            console.log("CLICK");
             message.textContent = `${GameController.getCurrentPlayer().player} Turn...`;
-            // console.log(`${GameController.getCurrentPlayer().marker}`);
             btn.textContent = GameController.getCurrentPlayer().marker;
             if(btn.textContent === "X" || btn.textContent === "O") {
                 btn.disabled = true;
@@ -214,12 +196,12 @@ const displayController = (() => {
     })
 
     const displayWinnerMessage = () => {
-        message.textContent = `${GameController.getCurrentPlayer().player} has won!`;
+        modalMessage.textContent = `${GameController.getCurrentPlayer().player} has won!`;
 
     }
 
     const displayTieMessage = () => {
-        message.textContent = "There has been a tie...";
+        modalMessage.textContent = "There has been a tie...";
     }
 
     const displayWhoTurnMessage = (player) => {
@@ -238,6 +220,11 @@ const displayController = (() => {
         })
     }
 
+    const displayModal = (displayFunc) => {
+        dialog.showModal();
+        displayFunc();
+    }
+
 
     const restartBtn = document.querySelector(".restart-btn");
     restartBtn.addEventListener("click", () => {
@@ -246,6 +233,7 @@ const displayController = (() => {
         displayWhoTurnMessage(GameController.getCurrentPlayer().player);
         player1ScoreElem.textContent = 0;
         player2ScoreElem.textContent = 0;
+        dialog.close();
 
     })
     const rematchBtn = document.querySelector(".rematch-btn");
@@ -253,15 +241,14 @@ const displayController = (() => {
         GameController.rematch();
         removeMarkers();
         displayWhoTurnMessage(GameController.getCurrentPlayer().player);
+        dialog.close();
     })
-    return { displayWinnerMessage, displayTieMessage, displayWhoTurnMessage, displayScore };
+    return { displayWinnerMessage, displayTieMessage, displayWhoTurnMessage, displayScore, displayModal };
     
 })();
 
 
 // TODO: Just focus on the HTML/CSS Now
 // Create a modal/dialog that pop up when a match is over and display the two buttons for user
-
-const dialog = document.querySelector("dialog");
-// console.log(dialog);
+// const dialog = document.querySelector("dialog");
 // dialog.showModal();
